@@ -23,6 +23,6 @@ $(APPNAME): $(OBJECTS)
 	$(CXX) -o $(APPNAME) $(OBJECTS) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	$(RM) $(OBJECTS) $(EXECS)
+	$(RM) $(OBJECTS) $(APPNAME)
 
 .PHONY: all clean
