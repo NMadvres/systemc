@@ -15,6 +15,7 @@ class packet_gen_module: public sc_module
     int m_packet_id;
     SC_HAS_PROCESS(packet_gen_module);
     global_config_c *m_cfg;
+    comm_stat_bw            *m_bw_stat;
     
   public:
     packet_gen_module(string name, global_config_c *glb_cfg);

@@ -16,6 +16,9 @@ ingress_sch::ingress_sch(string name, global_config_c *glb_cfg):sc_module(name)
     }
     //sch 
     rr_sch = new RR_SCH(g_m_inter_num);
+    //stat
+    string debug_file = name + string("_debug.log");
+    m_bw_stat =new comm_stat_bw(m_cfg, debug_file,g_m_inter_num);
 
     SC_METHOD(main_process);
     sensitive << clk.pos();
@@ -26,6 +29,12 @@ void ingress_sch::main_process()
    m_cycle_cnt++;   
    recv_packet_process();
    sch_process();
+
+   //stat
+   if((m_cycle_cnt !=0) && (m_cycle_cnt % (m_cfg->stat_period *100) ==0))
+   {
+       m_bw_stat->print_bw_info(m_cycle_cnt);
+   }
 }
 
 void ingress_sch::recv_packet_process()
@@ -64,6 +73,7 @@ void ingress_sch::sch_process()
     {
         TRANS front_trans = input_que[rst_que].front();
         input_que[rst_que].pop_front();
+        m_bw_stat->record_bw_info(rst_que, front_trans->valid_len, true);
     }
     
 }

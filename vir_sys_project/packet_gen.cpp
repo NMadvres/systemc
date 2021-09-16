@@ -21,6 +21,10 @@ packet_gen_module::packet_gen_module(string name, global_config_c *glb_cfg):sc_m
     {
         packet_shape[i] = new comm_shape_func(1000, 9620, 13, 10);
     }
+
+    //stat
+    string debug_file = name + string("_debug.log");
+    m_bw_stat =new comm_stat_bw(m_cfg, debug_file,g_m_inter_num);
     
     SC_METHOD(packet_gen_process);
     sensitive << clk.pos();
@@ -31,6 +35,12 @@ packet_gen_module::packet_gen_module(string name, global_config_c *glb_cfg):sc_m
 void packet_gen_module::packet_gen_process()
 {
    m_cycle_cnt++;   
+   //stat
+   if((m_cycle_cnt !=0) && (m_cycle_cnt % (m_cfg->stat_period *100) ==0))
+   {
+       m_bw_stat->print_bw_info(m_cycle_cnt);
+   }
+   
    //填桶
     if((m_cycle_cnt !=0) &&(m_cycle_cnt % 10 ==0))
     {
@@ -54,6 +64,8 @@ void packet_gen_module::packet_gen_process()
             new_trans->is_sop = true;
             new_trans->is_eop = true;
             output[i]->nb_write(new_trans);
+            //stat
+            m_bw_stat->record_bw_info(i, new_trans->valid_len, true);
         }
    }   
 }

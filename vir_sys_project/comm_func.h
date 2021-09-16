@@ -2,6 +2,7 @@
 #define __COMM_FUNC_H__
 #include<vector>
 #include "systemc.h"
+#include "comm_def.h"
 using namespace std;
 
 class WRR_SCH
@@ -71,6 +72,24 @@ class comm_delay_fifo: public sc_module
 
 };
 
+
+class comm_stat_bw
+{
+    public:
+        int m_que_num;
+        vector <int> m_que_pktlen_stat;
+        vector <int> m_que_pktnum_stat;
+        int m_total_pktlen_stat;
+        int m_total_pktnum_stat;
+        int m_stat_period;
+        global_config_c *m_glb_cfg;
+        string   m_file_name;
+        FILE     *m_fp; 
+    public:
+        comm_stat_bw(global_config_c *glb_cfg, string file_name, int que_num);
+        void record_bw_info(int que_id, int valid_len, int is_eop);
+        void print_bw_info(int m_cycle);
+};
 
 
 

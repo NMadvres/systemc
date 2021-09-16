@@ -18,6 +18,7 @@ using namespace tlm;
 
 const int g_m_freq  = 100; //100M HZ
 const int g_m_inter_num =4;
+const int g_m_ipg_len =20;
 
 typedef struct trans_type
 {
@@ -54,6 +55,7 @@ class global_config_c
       int  m_inter_num;      //接口数
       int  m_sch_sel;        //调度器选择 0:SP 1:RR  2:WRR
       int  shape_value;      //限速值 单位Mbps
+      int  stat_period;       //统计间隔，以us为单位
    public:
    global_config_c()
    {
@@ -61,6 +63,7 @@ class global_config_c
       m_inter_num =g_m_inter_num; 
       m_sch_sel = 1;
       shape_value = 1000;
+      stat_period = 10;
    }
 }; 
 

@@ -13,6 +13,7 @@ class ingress_sch: public sc_module
     sc_in_clk clk; 
     SC_HAS_PROCESS(ingress_sch);
     global_config_c *m_cfg;
+    comm_stat_bw            *m_bw_stat;
     
   public:
     ingress_sch(string name, global_config_c *glb_cfg);
@@ -23,6 +24,7 @@ class ingress_sch: public sc_module
     vector<deque<TRANS> >   input_que;
     int m_cycle_cnt;
     RR_SCH                  *rr_sch; 
+    
 
 };
  
