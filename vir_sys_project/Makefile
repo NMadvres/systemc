@@ -12,6 +12,7 @@ LDLIBS   += $(shell pkg-config --libs-only-l     systemc)
 SOURCES = comm_func.cpp \
 	  ingress_sch.cpp \
 	  packet_gen.cpp \
+	  pe_engress.cpp \
 	  test.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)

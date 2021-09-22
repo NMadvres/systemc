@@ -1,6 +1,7 @@
 #include "comm_func.h"
 #include "string.h"
 #include <iostream>
+
 comm_shape_func::comm_shape_func(int shape_value, int tmp_cbs_value, int add_value, int fill_period)
 {
     
@@ -73,37 +74,12 @@ bool  RR_SCH::get_sch_result(int &rst_que)
 }
 
 
-template <class T>
-comm_delay_fifo<T>::comm_delay_fifo(string name, sc_time t1):sc_module(name)
-{
-    m_cycle_cnt =0;
-    SC_METHOD(main_process);
-    sensitive << clk.pos();
-}
-
-template <class T>
-void comm_delay_fifo<T>::notify(T &)
-{
-    
-}
-
-template <class T>
-bool comm_delay_fifo<T>::get_ready_info(T &)
-{
-    return true;
-}
-
-template <class T>
-void comm_delay_fifo<T>::main_process()
-{
-    m_cycle_cnt ++;
-}
 
 //统计类相关
 comm_stat_bw::comm_stat_bw(global_config_c *glb_cfg, string file_name, int que_num)
 {
     m_glb_cfg = glb_cfg;
-    m_file_name =file_name;
+    m_file_name ="run_log/" + file_name;
     m_que_num = que_num;
     m_que_pktlen_stat.resize(m_que_num,0);
     m_que_pktnum_stat.resize(m_que_num,0);
@@ -111,6 +87,11 @@ comm_stat_bw::comm_stat_bw(global_config_c *glb_cfg, string file_name, int que_n
     m_total_pktnum_stat =0;
     m_stat_period = glb_cfg->stat_period;
     m_fp =  fopen (m_file_name.c_str(), "w+");
+    if(m_fp ==NULL)
+    {
+        system("mkdir -p run_log");
+        m_fp =  fopen (m_file_name.c_str(), "w+");
+    }
     fclose(m_fp);
 }
 

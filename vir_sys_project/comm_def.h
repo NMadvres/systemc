@@ -22,7 +22,8 @@ const int g_m_ipg_len =20;
 
 typedef struct trans_type
 {
-   int  port_id;
+   int  sport_id;
+   int  dport_id;
    int  que_id;
    int  packet_id;
    int  packet_len;
@@ -33,7 +34,8 @@ typedef struct trans_type
 
    trans_type()
    {
-      port_id =0;
+      sport_id =0;
+      dport_id =0;
       que_id  =0;
       packet_id =0;
       packet_len =0;

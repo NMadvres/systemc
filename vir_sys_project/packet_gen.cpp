@@ -58,7 +58,8 @@ void packet_gen_module::packet_gen_process()
             m_packet_id++;  
             TRANS new_trans(new trans_type);
             new_trans->packet_id = m_packet_id;
-            new_trans->port_id =i;
+            new_trans->sport_id =i;
+            new_trans->dport_id =i;
             new_trans->packet_len = 256;
             new_trans->valid_len =  256;
             new_trans->is_sop = true;

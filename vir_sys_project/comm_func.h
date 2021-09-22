@@ -59,18 +59,73 @@ template <class T>
 class comm_delay_fifo: public sc_module
 {
     public: 
-        comm_delay_fifo(string name, sc_time t1);
+        comm_delay_fifo(string name, int delay_cycle);
         SC_HAS_PROCESS(comm_delay_fifo);
-        void notify(T &);
-        bool get_ready_info(T &);
+        void notify(T &a);
+        bool get_ready_info(T &a);
         void main_process();
-
-    private:
+        //用两个deque存储，一个存储切片，一个存储时间信息用于比较
+        deque<T>   input_deque;
+        deque<int> info_deque;
         sc_in_clk clk;
+    private:
+        
         int m_cycle_cnt;
+        int m_delay_cycle;
 
 
 };
+
+
+template <class T>
+comm_delay_fifo<T>::comm_delay_fifo(string name,  int delay_cycle):sc_module(name)
+{
+    m_cycle_cnt =0;
+    m_delay_cycle = delay_cycle;
+    SC_METHOD(main_process);
+    sensitive << clk.pos();
+}
+
+template <class T>
+void comm_delay_fifo<T>::notify(T &a)
+{
+    input_deque.push_back(a);
+    info_deque.push_back(m_cycle_cnt);
+    
+}
+
+template <class T>
+bool comm_delay_fifo<T>::get_ready_info(T &a)
+{
+    if(info_deque.size() >0)
+    {
+        int front_cycle  = info_deque.front();
+        if(m_cycle_cnt -front_cycle  >= m_delay_cycle)
+        {
+            a = input_deque.front();
+            input_deque.pop_front();
+            info_deque.pop_front();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+    else
+    {
+        return false;
+    }
+      
+}
+
+template <class T>
+void comm_delay_fifo<T>::main_process()
+{
+    m_cycle_cnt ++;
+}
+
 
 
 class comm_stat_bw

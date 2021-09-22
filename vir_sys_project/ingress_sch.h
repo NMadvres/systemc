@@ -9,7 +9,8 @@
 class ingress_sch: public sc_module
 {
   public: 
-    vector<sc_fifo_in<TRANS> *> input_fifo;
+    vector<sc_fifo_in<TRANS> *>  input_fifo;
+    vector<sc_fifo_out<TRANS> *> output_fifo;
     sc_in_clk clk; 
     SC_HAS_PROCESS(ingress_sch);
     global_config_c *m_cfg;
